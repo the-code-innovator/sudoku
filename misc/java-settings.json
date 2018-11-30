@@ -1,0 +1,7 @@
+{
+	"java.home": "/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home",
+	"java.errors.incompleteClasspath.severity": "warning",
+	"java.completion.enabled": true,
+	"java.trace.server": "verbose",
+	"java.format.enabled": true
+}
