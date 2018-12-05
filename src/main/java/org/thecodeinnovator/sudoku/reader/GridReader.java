@@ -5,61 +5,118 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+
+import org.thecodeinnovator.sudoku.charset.CharParse;
+import org.thecodeinnovator.sudoku.console.ErrorPrinter;
+import org.thecodeinnovator.sudoku.console.InfoPrinter;
 
 public class GridReader {
-	public String filePath;
-	public ArrayList<String> stringsArrayList;
+	public Integer order;
 	public Integer dimension;
-	public Integer[][] gridIntegerMatrix;
-	public GridReader(String inputFilePathString) throws IOException {
-		this.filePath = inputFilePathString;
-		this.dimension = this.findDimension();
-		this.populateIntegerMatrix();
+	public ArrayList<ArrayList<Character>> matrix;
+	public InfoPrinter info;
+	public ErrorPrinter err;
+	public String filePath;
+	private static final String separator = new String(",");
+	public GridReader(String filePath) throws IOException {
+		this.filePath = new String(filePath);
+		this.err = new ErrorPrinter(System.out);
+		this.info = new InfoPrinter(System.out);
+		this.matrix = this.parseMatrix(filePath);
+		this.dimension = parseDimension(filePath);
+		this.order = parseOrder(filePath);
 	}
-	public Integer findDimension() throws IOException {
-		this.populateStringsArrayList();
-		ArrayList<Integer> lengthArrayList = new ArrayList<Integer>();
-		for (String stringElement : this.stringsArrayList) {
-			int elementLength = stringElement.split(",").length;
-			if (elementLength == this.stringsArrayList.size()) {
-				lengthArrayList.add(elementLength);
+	public ArrayList<Character> parseFile(String filePath) throws IOException {
+		String extension = this.getFileExtension(filePath);
+		ArrayList<Character> list = new ArrayList<Character>();
+		if (extension.equals(new String("txt"))) {
+			BufferedReader reader = new BufferedReader(new FileReader(new File(filePath)));
+			String line;
+			ArrayList<String> strings = new ArrayList<String>();
+			while ((line = reader.readLine()) != null) {
+				String[] lineContent = line.split(separator);
+				for (int i = 0; i < lineContent.length; i++) {
+					strings.add(lineContent[i]);
+				}
 			}
-		}
-		return (this.stringsArrayList.size() == lengthArrayList.size()) ? this.stringsArrayList.size() : 0;
-	}
-	public int[][] getPrimitiveMatrix() {
-		int[][] gridArray = new int[this.dimension][this.dimension];
-		for (int rowIterator = 0; rowIterator < this.dimension; rowIterator++) {
-			for (int columnIterator = 0; columnIterator < this.dimension; columnIterator++) {
-				gridArray[rowIterator][columnIterator] = this.gridIntegerMatrix[rowIterator][columnIterator];
+			for (String i : strings) {
+				list.add((new CharParse()).parseSegment(i));
 			}
+			reader.close();
 		}
-		return gridArray;
+		else {
+			this.err.setError("INVALID EXTENSION !");
+			this.err.putError();
+			System.exit(-1);
+		}
+		return list;
 	}
-	public void populateIntegerMatrix() {
-		this.gridIntegerMatrix = new Integer[this.dimension][this.dimension];
-		for (int lineIndex = 0; lineIndex < this.dimension; lineIndex++) {
-			String[] elementArray = this.stringsArrayList.get(lineIndex).split(",");
-			for (int lineContentIndex = 0; lineContentIndex < this.dimension; lineContentIndex++) {
-				this.gridIntegerMatrix[lineIndex][lineContentIndex] = Integer.parseInt(elementArray[lineContentIndex]);
+	public Integer parseDimension(String filePath) throws IOException {
+		String extension = this.getFileExtension(filePath);
+		Integer dimension = new Integer(0);
+		if (extension.equals(new String("txt"))) {
+			BufferedReader reader = new BufferedReader(new FileReader(new File(filePath)));
+			String line;
+			ArrayList<String> strings = new ArrayList<String>();
+			while ((line = reader.readLine()) != null) {
+				strings.add(line);
 			}
+			Integer dimensionX = strings.size();
+			Integer dimensionY = new Integer(0);
+			for (String i : strings) {
+				String[] lineContent = i.split(separator);
+				if (new Integer(lineContent.length).equals(dimensionX)) {
+					dimensionY += 1;
+				}
+			}
+			dimension = (dimensionX.equals(dimensionY)) ? dimensionX : new Integer(0);
+			reader.close();
 		}
-	}
-	public void populateStringsArrayList() throws IOException {
-		this.stringsArrayList = new ArrayList<String>();
-		File inputFile = new File(this.filePath);
-		FileReader fileReader = new FileReader(inputFile);
-		BufferedReader contentReader = new BufferedReader(fileReader);
-		String line = new String("");
-		while ((line = contentReader.readLine()) != null) {
-			stringsArrayList.add(line);
+		else {
+			this.err.setError("INVALID EXTENSION !");
+			this.err.putError();
+			System.exit(-1);
 		}
-		contentReader.close();
+		if (dimension.equals(new Integer(0))) {
+			this.err.setError("ZERO DIMENSION !");
+			this.err.putError();
+			System.exit(-1);
+		}
+		return dimension;
 	}
-	public Integer[][] getIntegerMatrix() {
-		return this.gridIntegerMatrix;
+	public ArrayList<ArrayList<Character>> parseMatrix(String filePath) throws IOException {
+		ArrayList<Character> input = this.parseFile(filePath);
+		ArrayList<ArrayList<Character>> matrix = new ArrayList<ArrayList<Character>>();
+		Integer dimension = this.parseDimension(filePath);
+		for (int i = 0; i < dimension; i++) {
+			List<Character> listCharacter = input.subList(i * dimension, i * dimension + 9);
+			ArrayList<Character> subList = new ArrayList<Character>();
+			for (Character j : listCharacter) {
+				subList.add(j);
+			}
+			matrix.add(subList);
+		}
+		return matrix;
 	}
-	public Integer getIntegerDimension() {
+	public Integer parseOrder(String filePath) throws IOException {
+		Integer dimension = this.parseDimension(filePath);
+		Integer order = new Integer(0);
+		Double sqrtDimension = Math.sqrt(new Double(dimension));
+		order = Integer.parseInt(String.format("%.0f", sqrtDimension));
+		return order;
+	}
+	public ArrayList<ArrayList<Character>> getMatrix() {
+		return this.matrix;
+	}
+	public Integer getDimension() {
 		return this.dimension;
+	}
+	public Integer getOrder() {
+		return this.order;
+	}
+	public String getFileExtension(String filePath) {
+		String[] filePart = filePath.split("\\.");
+		return new String(filePart[filePart.length - 1]);
 	}
 }

@@ -1,0 +1,45 @@
+case 1:
+	constructedCharSet.add(new Character('0'));
+	break;
+case 2:
+	constructedCharSet.add(new Character('0'));
+	constructedCharSet.add(new Character('1'));
+	break;
+case 3:
+	for (Character iterator = '0'; iterator <= '8'; iterator++) {
+		constructedCharSet.add(iterator);
+	}
+	break;
+case 4:
+	for (Character iterator = '0'; iterator <= '9'; iterator++) {
+		constructedCharSet.add(iterator);
+	}
+	for (Character iterator = 'A'; iterator <= 'F'; iterator++) {
+		constructedCharSet.add(iterator);
+	}
+	break;
+case 5:
+	for (Character iterator = '0'; iterator <= '9'; iterator++) {
+		constructedCharSet.add(iterator);
+	}
+	for (Character iterator = 'A'; iterator <= 'O'; iterator++) {
+		constructedCharSet.add(iterator);
+	}
+	break;
+case 6:
+	for (Character iterator = '0'; iterator <= '9'; iterator++) {
+		constructedCharSet.add(iterator);
+	}
+	for (Character iterator = 'A'; iterator <= 'Z'; iterator++) {
+		constructedCharSet.add(iterator);
+	}
+	break;
+
+
+
+// 1: [-, 0]
+// 2: [-, 0, 1]
+// 3: [-, 0, 1, 2, 3, 4, 5, 6, 7, 8]
+// 4: [-, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, A, B, C, D, E, F]
+// 5: [-, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, A, B, C, D, E, F, G, H, I, J, K, L, M, N, O]
+// 6: [-, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z]

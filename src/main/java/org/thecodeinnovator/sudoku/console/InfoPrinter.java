@@ -80,4 +80,13 @@ public class InfoPrinter {
 	public void putInformation() {
 		this.infoStream.println(this.infoString);
 	}
+	/**
+	 * setPair to set the infoString and infoStream
+	 * @param string the infoString
+	 * @param stream the infoStream
+	 * @return InfoPrinter with the string and stream set
+	 */
+	public InfoPrinter setPair(String string, PrintStream stream) {
+		return new InfoPrinter(string, stream);
+	}
 }

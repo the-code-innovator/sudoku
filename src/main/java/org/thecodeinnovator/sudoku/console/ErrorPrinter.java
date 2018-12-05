@@ -83,4 +83,13 @@ public class ErrorPrinter {
 	public void putError() {
 		this.errorStream.println(this.errorString);
 	}
+	/**
+	 * setPair to set the errorString and errorStream
+	 * @param string the errorString
+	 * @param stream the errorStream
+	 * @return ErrorPrinter with the string and stream set
+	 */
+	public ErrorPrinter setPair(String string, PrintStream stream) {
+		return new ErrorPrinter(string, stream);
+	}
 }
