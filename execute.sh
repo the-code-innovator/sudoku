@@ -11,3 +11,5 @@ mvn package
 
 # executing the jar as an app
 java -jar target/SudokuSolver-1.0.jar
+echo ""
+echo "-------- EOF --------"
