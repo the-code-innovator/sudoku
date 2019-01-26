@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.thecodeinnovator.sudoku.charset.CharParse;
+import org.thecodeinnovator.sudoku.charset.CharSet;
 import org.thecodeinnovator.sudoku.console.ErrorPrinter;
 import org.thecodeinnovator.sudoku.console.InfoPrinter;
 
@@ -24,8 +25,6 @@ public class GridReader {
 		this.err = new ErrorPrinter(System.out);
 		this.info = new InfoPrinter(System.out);
 		this.matrix = this.parseMatrix(filePath);
-		this.dimension = parseDimension(filePath);
-		this.order = parseOrder(filePath);
 	}
 	public ArrayList<Character> parseFile(String filePath) throws IOException {
 		String extension = this.getFileExtension(filePath);
@@ -41,12 +40,26 @@ public class GridReader {
 				}
 			}
 			for (String i : strings) {
-				list.add((new CharParse()).parseSegment(i));
+				list.add(CharParse.parseSegment(i));
 			}
 			reader.close();
 		}
 		else {
 			this.err.setError("INVALID EXTENSION !");
+			this.err.putError();
+			System.exit(-1);
+		}
+		boolean validCharacter = true;
+		CharSet input = new CharSet();
+		ArrayList<Character> validCharacterList = input.getCharSet();
+		for (Character listChar : list) {
+			if (validCharacterList.contains(listChar) == false) {
+				validCharacter = false;
+				break;
+			}
+		}
+		if (validCharacter == false) {
+			this.err.setError("Invalid Character in File !");
 			this.err.putError();
 			System.exit(-1);
 		}
@@ -85,12 +98,16 @@ public class GridReader {
 		}
 		return dimension;
 	}
+	public Integer parseOrder(String filePath) throws IOException {
+		this.dimension = this.parseDimension(filePath);
+		return Integer.parseInt(String.format("%.0f", Math.sqrt(new Double(this.dimension))));
+	}
 	public ArrayList<ArrayList<Character>> parseMatrix(String filePath) throws IOException {
 		ArrayList<Character> input = this.parseFile(filePath);
 		ArrayList<ArrayList<Character>> matrix = new ArrayList<ArrayList<Character>>();
-		Integer dimension = this.parseDimension(filePath);
-		for (int i = 0; i < dimension; i++) {
-			List<Character> listCharacter = input.subList(i * dimension, i * dimension + 9);
+		this.order = parseOrder(filePath);
+		for (int i = 0; i < this.dimension; i++) {
+			List<Character> listCharacter = input.subList(i * this.dimension, i * this.dimension + 9);
 			ArrayList<Character> subList = new ArrayList<Character>();
 			for (Character j : listCharacter) {
 				subList.add(j);
@@ -98,13 +115,6 @@ public class GridReader {
 			matrix.add(subList);
 		}
 		return matrix;
-	}
-	public Integer parseOrder(String filePath) throws IOException {
-		Integer dimension = this.parseDimension(filePath);
-		Integer order = new Integer(0);
-		Double sqrtDimension = Math.sqrt(new Double(dimension));
-		order = Integer.parseInt(String.format("%.0f", sqrtDimension));
-		return order;
 	}
 	public ArrayList<ArrayList<Character>> getMatrix() {
 		return this.matrix;

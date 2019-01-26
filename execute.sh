@@ -7,4 +7,7 @@ mvn compile
 mvn package
 
 # executing the project by passing a file in as command line argument
-java -jar target/SudokuSolver-1.0.jar misc/sudoku-comma.txt
+# java -jar target/SudokuSolver-1.0.jar misc/sudoku-comma.txt
+
+# executing the jar as an app
+java -jar target/SudokuSolver-1.0.jar
