@@ -19,7 +19,7 @@
 	"editor.codeLens": true,
 	"editor.largeFileOptimizations": true,
 	"editor.lineNumbers": "on",
-	"window.zoomLevel": -1,
+	"window.zoomLevel": -3,
 	"markdown.preview.fontSize": 18,
 	"diffEditor.ignoreTrimWhitespace": true,
 	"diffEditor.renderIndicators": true,
@@ -38,7 +38,7 @@
 	"terminal.integrated.fontFamily": "FiraCode-Regular",
 	"terminal.integrated.rendererType": "canvas",
 	"terminal.integrated.showExitAlert": false,
-	"workbench.colorTheme": "Solarized Dark",
+	"workbench.colorTheme": "Ayu Dark Bordered",
 	"editor.insertSpaces": false,
 	"editor.detectIndentation": false,
 }
